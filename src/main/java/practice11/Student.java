@@ -25,4 +25,13 @@ public class Student extends Person {
     public void change(Klass klass) {
         this.klass=klass;
     }
+
+	@Override
+	public String toString() {
+		return "Student [klass=" + klass + "]";
+	}
+    
+    
+    
+    
 }

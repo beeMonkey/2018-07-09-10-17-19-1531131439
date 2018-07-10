@@ -7,7 +7,8 @@ import java.util.Objects;
 public class Klass {
     private int number;
     private Student leader;
-    private List<Student> studentsOfKlass;
+    private List<Student> studentsOfKlass = new ArrayList<Student>();
+    private ArrayList<JoinClassListener> joinClassListenerList =new ArrayList<JoinClassListener>();
     Klass(int number){
         this.number=number;
     }
@@ -31,9 +32,10 @@ public class Klass {
     public void assignLeader(Student leader) {
         if(this.equal(leader.getKlass())){
             this.leader=leader;
+            notifyTeacherSomeoneJoinClass(leader);
         }
         else{
-            System.out.print("It is not one of us.\n");     //在输出的时候要注意
+            System.out.print("It is not one of us.\n");  
         }
     }
 
@@ -41,10 +43,27 @@ public class Klass {
         return this.leader;
     }
 
+    public void registerJoinListener(JoinClassListener joinClassListener){
+        joinClassListenerList.add(joinClassListener);
+    }
+    
+    public void notifyTeacherSomeoneJoinClass(Student student){
+        for(int i = 0;i<joinClassListenerList.size();i++){
+            joinClassListenerList.get(i).saySomeoneJoinClass(student,this.number);
+        }
+    }
+
     public void appendMember(Student student) {
         student.change(this);
-        studentsOfKlass = new ArrayList<Student>();
         this.studentsOfKlass.add(student);
+        notifyTeacherSomeoneJoinClass(student);
     }
+
+	@Override
+	public String toString() {
+		return "Klass [number=" + number + ", leader=" + leader + ", studentsOfKlass=" + studentsOfKlass
+				+ ", joinClassListenerList=" + joinClassListenerList + "]";
+	}
+
 
 }
